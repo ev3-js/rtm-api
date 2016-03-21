@@ -1,0 +1,30 @@
+{
+  "name": "ev3-api",
+  "version": "0.1.0",
+  "description": "A realtime API for use on ev3 robots with rtm-server",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test/test.js",
+    "postversion": "git push && git push --tags && npm publish --access=public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ev3-js/rtm-api.git"
+  },
+  "author": "danleavitt0",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ev3-js/rtm-api/issues"
+  },
+  "homepage": "https://github.com/ev3-js/rtm-api#readme",
+  "dependencies": {
+    "@f/foreach": "^1.2.2",
+    "component-emitter": "^1.2.0",
+    "ev3-js-device": "^0.1.4",
+    "ev3-js-devices": "^0.5.17",
+    "tape": "^4.5.1"
+  }
+}
