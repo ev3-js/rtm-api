@@ -33,6 +33,7 @@ test('stop reading on socket close', function (t) {
     socketId: 1
   }
   API['sensor_subscribe'](data, function (err, val) {
+    console.log(val)
     t.equal(val, true)
     t.equal(API['reading'](), true)
     messages.emit('close', 1)
