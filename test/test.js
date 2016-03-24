@@ -9,6 +9,8 @@ var defaultPaths = {
   sensor: path.join(__dirname, 'fake-sys/class/lego-sensor')
 }
 
+API.setPaths(defaultPaths)
+
 test('sensor_mode', function (t) {
   t.plan(2)
   var port = 1
@@ -17,11 +19,11 @@ test('sensor_mode', function (t) {
     t.equals(sensor.read('mode'), 'IR-PROX')
     var sensorModeObj = {
       port: 1,
-      value: 'IR-SEEK'
+      command: 'IR-SEEK'
     }
     API['sensor_mode'](sensorModeObj, function (err, val) {
       t.equals(sensor.read('mode'), 'IR-SEEK')
-    }, defaultPaths)
+    })
   })
 })
 
@@ -41,7 +43,7 @@ test('stop reading on socket close', function (t) {
       t.equal(API['reading'](), false)
       t.end()
     }, 100)
-  }, defaultPaths)
+  })
 })
 
 test('sensor_sub and sensor_unsub', function (t) {
@@ -54,11 +56,14 @@ test('sensor_sub and sensor_unsub', function (t) {
   API['sensor_subscribe'](data, function (err, val) {
     t.equal(val, true)
     t.equal(API['reading'](), true)
-    API['sensor_unsubscribe'](data, function (err, val) {
-      t.equal(val, true)
-      t.equal(API['reading'](), false)
-    })
-  }, defaultPaths)
+    setTimeout(function () {
+      API['sensor_unsubscribe'](data, function (err, val) {
+        t.equal(val, true)
+        t.equal(API['reading'](), false)
+      })
+    }, 5000)
+
+  })
 })
 
 test('motor_read', function (t) {
