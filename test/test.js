@@ -61,7 +61,7 @@ test('sensor_sub and sensor_unsub', function (t) {
         t.equal(val, true)
         t.equal(API['reading'](), false)
       })
-    }, 5000)
+    }, 1000)
 
   })
 })
@@ -99,6 +99,7 @@ test('motor_write', function (t) {
     t.equals(motor.read('duty_cycle_sp'), '50')
     t.equals(motor.read('command'), 'run-to-rel-pos')
     resetMotor('a')
+    t.end()
   }, defaultPaths)
 })
 
