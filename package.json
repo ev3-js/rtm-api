@@ -24,7 +24,7 @@
     "@f/foreach": "^1.2.2",
     "component-emitter": "^1.2.0",
     "ev3-js-device": "^0.1.4",
-    "ev3-js-devices": "^0.5.18",
+    "ev3-js-devices": "^0.5.21",
     "tape": "^4.5.1"
   }
 }
