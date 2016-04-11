@@ -32,5 +32,8 @@
     "ev3-js-device": "^0.1.4",
     "ev3-js-devices": "^0.5.22",
     "tape": "^4.5.1"
+  },
+  "devDependencies": {
+    "@f/defaults": "^1.0.1"
   }
 }
