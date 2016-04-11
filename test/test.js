@@ -23,6 +23,7 @@ test('sensor_mode', function (t) {
       command: 'IR-SEEK'
     }
     API['sensor_mode'](sensorModeObj, function (err, val) {
+      if (err) {}
       t.equals(sensor.read('mode'), 'IR-SEEK')
     })
   })
@@ -34,7 +35,7 @@ test('stop reading on socket close', function (t) {
     socketId: 1
   }
   API['sensor_subscribe'](data, function (err, val) {
-    console.log(val)
+    if (err) {}
     t.equal(val, true)
     t.equal(API['reading'](), true)
     messages.emit('close', 1)
@@ -51,15 +52,16 @@ test('sensor_sub and sensor_unsub', function (t) {
     socketId: 1
   }
   API['sensor_subscribe'](data, function (err, val) {
+    if (err) {}
     t.equal(val, true)
     t.equal(API['reading'](), true)
     setTimeout(function () {
       API['sensor_unsubscribe'](data, function (err, val) {
+        if (err) {}
         t.equal(val, true)
         t.equal(API['reading'](), false)
       })
     }, 1000)
-
   })
 })
 
@@ -72,6 +74,7 @@ test('motor_read', function (t) {
     value: 'state'
   }
   API['motor_read'](readObj, function (err, val) {
+    if (err) {}
     t.equals(motor.read('state'), val)
     resetMotor('a')
   }, defaultPaths)
@@ -92,6 +95,7 @@ test('motor_write', function (t) {
   }
   var motor = new Device(devices(port, defaultPaths))
   API['motor_write'](runObj, function (err, val) {
+    if (err) {}
     t.equals(motor.read('position_sp'), '1000')
     t.equals(motor.read('speed_sp'), '50')
     t.equals(motor.read('command'), 'run-to-rel-pos')
@@ -100,8 +104,6 @@ test('motor_write', function (t) {
     t.end()
   }, defaultPaths)
 })
-
-
 
 function resetMotor (port, cb) {
   cb = cb || function () {}
