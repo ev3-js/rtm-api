@@ -7,8 +7,14 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node test/test.js",
-    "postversion": "git push && git push --tags && npm publish --access=public"
+    "test": "tape 'test/**/*.js'",
+    "preversion": "npm run validate",
+    "postversion": "git push && git push --tags && npm publish --access=public",
+    "validate": "standard && npm run test",
+    "clean": "rm -rf lib",
+    "init:travis": "travis enable",
+    "init": "npm install && npm run init:git && npm run init:travis",
+    "dev": "beefy src/index.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +30,7 @@
     "@f/foreach": "^1.2.2",
     "component-emitter": "^1.2.0",
     "ev3-js-device": "^0.1.4",
-    "ev3-js-devices": "^0.5.21",
+    "ev3-js-devices": "^0.5.22",
     "tape": "^4.5.1"
   }
 }

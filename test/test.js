@@ -1,7 +1,8 @@
 var test = require('tape')
 var API = require('../lib/index')
 var Device = require('ev3-js-device')
-var devices = require('ev3-js-devices')
+var devices = require('ev3-js-devices').devices
+var clearDevices = require('ev3-js-devices').clear
 var path = require('path')
 
 var defaultPaths = {
@@ -29,8 +30,6 @@ test('sensor_mode', function (t) {
 
 test('stop reading on socket close', function (t) {
   var messages = API['messages']
-  var port = 1
-  var sensor = new Device(devices(port, defaultPaths))
   var data = {
     socketId: 1
   }
@@ -48,8 +47,6 @@ test('stop reading on socket close', function (t) {
 
 test('sensor_sub and sensor_unsub', function (t) {
   t.plan(4)
-  var port = 1
-  var sensor = new Device(devices(port, defaultPaths))
   var data = {
     socketId: 1
   }
@@ -90,15 +87,16 @@ test('motor_write', function (t) {
     port: port,
     opts: {
       'position_sp': '1000',
-      'duty_cycle_sp': '50'
+      'speed_sp': '50'
     }
   }
   var motor = new Device(devices(port, defaultPaths))
   API['motor_write'](runObj, function (err, val) {
     t.equals(motor.read('position_sp'), '1000')
-    t.equals(motor.read('duty_cycle_sp'), '50')
+    t.equals(motor.read('speed_sp'), '50')
     t.equals(motor.read('command'), 'run-to-rel-pos')
     resetMotor('a')
+    clearDevices()
     t.end()
   }, defaultPaths)
 })
@@ -108,7 +106,6 @@ test('motor_write', function (t) {
 function resetMotor (port, cb) {
   cb = cb || function () {}
   port = port || 'a'
-  var responses = 0
   var motor = new Device(devices(port, defaultPaths))
   motor.write('command', 'run-forever')
   motor.write('position_sp', '0')
