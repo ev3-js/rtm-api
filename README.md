@@ -25,20 +25,40 @@ server(API, 5000)
 ### messages
 Emitter for communication with the server.
 
-### sensor_mode(data, cb)
+### sensor_mode(data, [cb])
 Set the mode of one of the sensors.
 
-- `data` - Object
-```js
-{
-    port: 'port of sensor',
-    command: 'mode'
-}
-```
-- `cb` - callback
+##### data
+Type: `object`
 
-### sensor_subscribe(data, cb)
+Object with options for the sensor mode.
+
+###### command
+Type: `string`
+
+The [ev3dev sensor mode](http://www.ev3dev.org/docs/sensors/) to set.
+###### port
+Type: `string`, `number`
+
+The number of the port the sensor is connected to.
+
+##### cb
+Type: `function`
+
+Callback function that is called when the sensor mode change is completed. Function should have an error argument.
+
+### sensor_subscribe(data, [cb])
 Subscribe to read the values from the sensors and the state of the motors. The first time this is called it begins the polling process. The messages are then emitted via messages as an object.
+
+##### data
+Type: `object`
+
+Object that contains the socket id for the emitter to transmit on.
+
+###### socketId
+Type: `number`
+
+reading channel ID for emitting the sensor object.
 
 Example sensors object:
 ```js
@@ -54,20 +74,133 @@ Example sensors object:
 }
 ```
 
-### sensor_unsubscribe(data, cb)
+##### cb
+Type: `function`
 
-### motor_read(data, cb)
+Callback function that is called when the sensor polling has been started.
 
-### motor_write(data, cb)
+### sensor_unsubscribe(data, [cb])
+Stop receiving information from the sensors. If this is the last connection to the robot, the sensor polling will be stopped.
 
-### motors_write(data, cb)
+##### data
+Type: `object`
 
-### ping(data, cb)
+###### socketId
+Type: `number`
 
-### setPaths(data, cb)
+The ID of which reading channel to close.
 
-### reading(data, cb)
+##### cb
+Type: `function`
 
+Callback function that is called when the sensor polling has been canceled.
+
+### motor_write(data, [cb])
+Start a single motor move.
+
+##### data
+Type: `object`
+
+Object with information to start motor moves.
+
+###### command
+Type: `string`
+
+Type of [ev3dev motor command](http://www.ev3dev.org/docs/tutorials/tacho-motors/#running-the-motor) to run.
+
+###### port
+Type: `string`
+
+Letter of the port the motor is attached to.
+
+###### opts
+Options to set for the move command. Check out the [ev3dev tacho-motor tutorial](http://www.ev3dev.org/docs/tutorials/tacho-motors/) for more information on these options. The three most common ones are explained below.
+Type: `object`
+
+**speed_sp**
+
+Type: `string`
+
+Set the speed of the motors. The tutorial above has a more in depth explanation but the number should stay below 800 for the ev3 motors.
+
+**time_sp**
+
+Type: `string`
+
+Set the time the motor should run for in milliseconds. Should only be used for a `run-timed` command.
+
+**position_sp**
+
+Type: `string`
+
+The degrees the tacho-motor should spin. This is used for the `run-to-rel-pos` and `run-to-abs-pos` commands.
+
+### motors_write(data, [cb])
+Moves two motors at the same time. Should be used to handle driving the robot.
+
+##### data
+Type: `object`
+
+Object with information to start motor moves.
+
+###### command
+Type: `string`
+
+Type of [ev3dev motor command](http://www.ev3dev.org/docs/tutorials/tacho-motors/#running-the-motor) to run.
+
+###### port
+Type: `array`
+
+Array of strings that indicate the two drive motors.
+
+Example:
+```js
+['b', 'c']
+```
+
+###### left
+Type: `object`
+
+`motor_write` opts object to use for the left motor (first in the ports array). See above for details.
+
+###### right
+Type: `object`
+
+`motor_write` opts object to use in the right motor (second in the ports array). See above for details.
+
+##### cb
+Type: `function`
+
+Callback function is called either on error or when both motors have successfully written their commands. First argument is `err`.
+
+### ping(data, [cb])
+A ping to check the connection to the client.
+
+##### cb
+Type: `function`
+
+Function gets passed (err, true).
+
+### setPaths(paths)
+Change the default paths to the motors and sensors. Useful for testing purposes.
+
+##### paths
+Type: `object`
+
+###### motor
+Type: `string`
+
+Path to motor. Default path is `'/sys/class/tacho-motor/'`.
+
+###### sensor
+type: `string`
+
+Path to sensor. Default path is `'/sys/class/lego-sensor/'`.
+
+### reading()
+Check to see if the sensors are currently reading. Only used for testing.
+
+**Returns** a boolean
 
 [travis-image]: https://img.shields.io/travis/ev3-js/rtm-api.svg?style=flat
 [travis-url]: https://travis-ci.org/ev3-js/rtm-api
