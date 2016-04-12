@@ -65,21 +65,6 @@ test('sensor_sub and sensor_unsub', function (t) {
   })
 })
 
-test('motor_read', function (t) {
-  t.plan(1)
-  var port = 'a'
-  var motor = new Device(devices(port, defaultPaths))
-  var readObj = {
-    port: port,
-    value: 'state'
-  }
-  API['motor_read'](readObj, function (err, val) {
-    if (err) {}
-    t.equals(motor.read('state'), val)
-    resetMotor('a')
-  }, defaultPaths)
-})
-
 test('motor_write', function (t) {
   t.plan(3)
   var port = 'a'
